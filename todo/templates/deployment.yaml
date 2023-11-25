@@ -1,85 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-backend-deployment
-spec:
-  selector:
-    matchLabels:
-      app: {{ .Release.Name }}-backend-deployment
-  template:
-    metadata:
-      labels:
-        app: {{ .Release.Name }}-backend-deployment
-    spec:
-      containers:
-      - name: {{ .Release.Name }}-backend-deployment
-        image: {{ .Values.backend.image }}
-        ports:
-        - containerPort: {{ .Values.backend.port }}
-        env:
-        - name: MONGODB_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Release.Name }}-mongo-secret
-              key: mongo-root-username
-        - name: MONGODB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Release.Name }}-mongo-secret
-              key: mongo-root-password
-        - name: MONGODB_URI
-          valueFrom:
-            configMapKeyRef:
-              name: {{ .Release.Name }}-mongo-config
-              key: database-url
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ .Release.Name }}-backend-service
-spec:
-  type: LoadBalancer
-  selector:
-    app: {{ .Release.Name }}-backend-deployment
-  ports:
-  - port: {{ .Values.backend.port }}
-    targetPort: {{ .Values.backend.port }}
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ .Release.Name }}-frontend-deployment
-spec:
-  selector:
-    matchLabels:
-      app: {{ .Release.Name }}-frontend-deployment
-  template:
-    metadata:
-      labels:
-        app: {{ .Release.Name }}-frontend-deployment
-    spec:
-      containers:
-      - name: {{ .Release.Name }}-frontend-deployment
-        image: {{ .Values.frontend.image }}
-        ports:
-        - containerPort: {{ .Values.frontend.port }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ .Release.Name }}-frontend-service
-spec:
-  type: LoadBalancer
-  selector:
-    app: {{ .Release.Name }}-frontend-deployment
-  ports:
-  - port: {{ .Values.frontend.port }}
-    targetPort: {{ .Values.frontend.port }}
-    nodePort: {{ .Values.frontend.nodePort }}
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: {{ .Release.Name }}-mongo-deployment
   labels:
     app: mongodb
@@ -128,3 +49,51 @@ spec:
   - port: {{ .Values.mongo.port }}
     protocol: TCP
     targetPort: {{ .Values.mongo.port }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-backend-deployment
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-backend-deployment
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-backend-deployment
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-backend-deployment
+        image: {{ .Values.backend.image }}
+        ports:
+        - containerPort: {{ .Values.backend.port }}
+        env:
+        - name: MONGODB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-mongo-secret
+              key: mongo-root-username
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-mongo-secret
+              key: mongo-root-password
+        - name: MONGODB_URI
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Release.Name }}-mongo-config
+              key: database-url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-backend-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: {{ .Release.Name }}-backend-deployment
+  ports:
+  - port: {{ .Values.backend.port }}
+    targetPort: {{ .Values.backend.port }}
+---
