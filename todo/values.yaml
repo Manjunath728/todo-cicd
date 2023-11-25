@@ -1,5 +1,5 @@
 backend:
-  image: manjunath728/todo-server:4
+  image: manjunath728/todo-server:64
   port: 5000
 
 mongo:
