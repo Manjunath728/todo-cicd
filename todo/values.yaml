@@ -1,6 +1,5 @@
 backend:
-  image: manjunath728/todo-server
-  tag: latest
+  image: manjunath728/todo-server:4
   port: 5000
 
 mongo:
