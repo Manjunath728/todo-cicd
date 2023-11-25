@@ -1,0 +1,32 @@
+backend:
+  image: manjunath728/todo-server
+  tag: ${BUILD_NUMBER}
+  port: 5000
+
+frontend:
+  image: manjunath728/todo
+  tag: ${BUILD_NUMBER}
+  port: 3000
+  nodePort: 30002
+
+mongo:
+  port: 27017
+
+  persistentVolume:
+    capacity: 1Gi
+    accessMode: ReadWriteOnce
+    reclaimPolicy: Retain
+    storageClassName: local-storage
+    localPath: /home/manjunath/KPV
+    nodeSelectorValue: minikube
+
+  persistentVolumeClaim:
+    storage: 1Gi
+    accessMode: ReadWriteOnce
+
+  secret:
+    mongoRootUsername: cm9vdA==
+    mongoRootPassword: cjAwdA==
+
+  configMap:
+    databaseUrl: mongodb-service

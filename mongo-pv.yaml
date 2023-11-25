@@ -4,14 +4,14 @@ metadata:
   name: mongo-pv
 spec:
   capacity:
-    storage: 1Gi
+    storage: 100M
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce  # Adjust access mode based on your requirements
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-storage
   local:
-    path: /home/manjunath/KPV  # Replace with your local path
+    path: /home/worker/ # Replace with your local path
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -19,4 +19,4 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - minikube
+          - worker
