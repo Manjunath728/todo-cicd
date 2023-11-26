@@ -6,14 +6,14 @@ spec:
   replica : {{ .Values.frontend.replica }}
   selector:
     matchLabels:
-      app: frontend-deployment
+      app: {{ .Release.Name }}-frontend-deployment
   template:
     metadata:
       labels:
-        app: frontend-deployment
+        app: {{ .Release.Name }}-frontend-deployment
     spec:
       containers:
-      - name: frontend-deployment
+      - name: {{ .Release.Name }}-frontend-deployment
         image: {{ .Values.frontend.image }}
         ports:
         - {{ .Values.frontend.port }}
@@ -25,7 +25,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: frontend-deployment
+    app: {{ .Release.Name }}-frontend-deployment
   ports:
   - port: {{ .Values.frontend.port }}
     targetPort: {{ .Values.frontend.port }}
