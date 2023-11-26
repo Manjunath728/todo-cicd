@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend-deployment
-        image: manjunath728/todo:34
+        image: {{ .Values.frontend.image }}
         ports:
         - {{ .Values.frontend.port }}
 ---

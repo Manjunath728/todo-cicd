@@ -2,3 +2,4 @@ frontend:
   replica : 2
   port: 3000
   nodePort : 30002
+  image: manjunath728/todo:23 
