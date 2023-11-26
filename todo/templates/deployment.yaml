@@ -5,7 +5,7 @@ metadata:
   labels:
     app: mongodb
 spec:
-  replicas: 1
+  replicas: {{ .Values.mongo.replica }}
   selector:
     matchLabels:
       app: mongodb
@@ -55,6 +55,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-backend-deployment
 spec:
+  replicas: {{ .Values.backend.replica }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-backend-deployment

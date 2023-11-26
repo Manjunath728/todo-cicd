@@ -1,9 +1,11 @@
 backend:
   image: manjunath728/todo-server:96
   port: 5000
+  replica : 3
 
 mongo:
   port: 27017
+  replica : 1
 
   persistentVolumeClaim:
     storage: 50M
