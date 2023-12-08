@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-frontend-deployment
 spec:
-  replica : {{ .Values.frontend.replica }}
+  replicas: {{ .Values.frontend.replica }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-frontend-deployment
@@ -16,17 +16,32 @@ spec:
       - name: {{ .Release.Name }}-frontend-deployment
         image: {{ .Values.frontend.image }}
         ports:
-        - {{ .Values.frontend.port }}
+        - containerPort: {{ .Values.frontend.port }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Release.Name }}-frontend-service
 spec:
-  type: LoadBalancer
   selector:
     app: {{ .Release.Name }}-frontend-deployment
   ports:
   - port: {{ .Values.frontend.port }}
     targetPort: {{ .Values.frontend.port }}
-    nodePort : {{ .Values.frontend.nodePort }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-ingress
+spec:
+  rules:
+  - host: my.app.todo
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Release.Name }}-frontend-service
+            port:
+              number: {{ .Values.frontend.port }}
