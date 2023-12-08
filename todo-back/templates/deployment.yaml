@@ -95,8 +95,10 @@ spec:
   selector:
     app: {{ .Release.Name }}-backend-deployment
   ports:
-  - port: {{ .Values.backend.port }}
-    targetPort: {{ .Values.backend.port }}  # Corrected line
+    - protocol: TCP
+      port: 80
+      targetPort: {{ .Values.backend.port }}
+      nodePort: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
