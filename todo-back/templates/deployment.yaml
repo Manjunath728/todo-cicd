@@ -91,12 +91,11 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-backend-service
 spec:
-  type: LoadBalancer
   selector:
     app: {{ .Release.Name }}-backend-deployment
   ports:
   - port: {{ .Values.backend.port }}
-    targetPort: {{ .Values.backend.port }}
+    targetPort: {{ .Values.backend.port }}  # Corrected line
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
